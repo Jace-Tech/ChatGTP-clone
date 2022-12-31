@@ -36,10 +36,9 @@ app.post("/", async (req, res) => {
       presence_penalty: 0,
     });
 
-    console.log(response)
-    res.status(200).json({ data: response.data.choices[0].text })
+    res.status(200).json({ data: response.data.choices[0].text, error: null })
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message, data: null });
   }
 
 })
