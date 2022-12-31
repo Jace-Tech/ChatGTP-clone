@@ -81,7 +81,6 @@ body {
 }
 
 .ai .profile {
-  /* background: #10a37f; */
   background: #10a37f;
 }
 
@@ -93,16 +92,13 @@ body {
 
 .message {
   flex: 1;
-
   color: #dcdcdc;
   font-size: 1rem;
   line-height: 1.7;
   font-weight: 300;
-
   max-width: 100%;
   overflow-x: scroll;
   white-space: pre-wrap; 
-
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -125,7 +121,7 @@ form {
 
 textarea {
   width: 100%;
-
+  resize: vertical;
   color: #fff;
   font-size: .9rem;
   font-weight: 300;

@@ -42,7 +42,7 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
 
   let currentIndex = 0;
   const interval = setInterval(() => {
-    if (currentIndex >= text.length - 1) return clearInterval(interval);
+    if (currentIndex >= text.length) return clearInterval(interval);
     element.innerHTML += text.charAt(currentIndex);
     currentIndex++;
     handleScrollDown();
@@ -58,6 +58,7 @@ const handleScrollDown = () =>
 
 const handleFormSubmit = async () => {
   const formData = new FormData(form as HTMLFormElement);
+  if(!formData.get("message")) return
   // Add the users chat
   messageBox?.append(
     generateChat(formData.get("message"), false, generateID())
@@ -87,6 +88,7 @@ const handleFormSubmit = async () => {
       clearInterval(interval);
       chatDiv.innerHTML = "Sorry something went wrong. Please try again";
       console.log(error);
+      handleScrollDown();
       return;
     }
 
@@ -105,6 +107,7 @@ const handleFormSubmit = async () => {
     clearInterval(interval);
     chatDiv.innerHTML = "Sorry something went wrong. Please try again";
     console.log(error);
+    handleScrollDown();
     return;
   }
 };
