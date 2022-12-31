@@ -3,7 +3,7 @@ import user from "../assets/user.svg";
 
 const messageBox = document.querySelector<HTMLDivElement>("#chat_container");
 const form = document.querySelector<HTMLFormElement>("form");
-const CHAT_BOT_URL = "http://localhost:5000/";
+const CHAT_BOT_URL = "https://chatbot-api-nusx.onrender.com";
 
 const generateID = () => {
   const timestamp = Date.now().toString();
