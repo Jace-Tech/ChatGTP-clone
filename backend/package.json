@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "start": "npm run build && node build/server.js",
+    "start": "yarn && yarn build && node ./build/server.js",
     "dev": "nodemon src/server.ts"
   },
   "license": "MIT",
