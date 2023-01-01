@@ -13,7 +13,7 @@ Live Demo here <a href="https://chat-gtp-clone.vercel.app/" target="_blank">Chat
   ```bash
     # OUTPUT: v16.15.0 (It mustn't be same version as mine)
   ```
-  if it's not there, you can install from this site <a href="https://nodejs.org/en/" target="_blank">Chat Bot Demo</a>
+  if it's not there, you can install from this site <a href="https://nodejs.org/en/" target="_blank"> Node JS</a>
 
 - Clone the repo 
   ```bash
