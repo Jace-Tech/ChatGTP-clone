@@ -2,17 +2,18 @@
 
 A chatGPT clone made with Typescript 
 
-Live Demo here [Chat Bot Demo]('https://chat-gtp-clone.vercel.app/')
+Live Demo here [Chat Bot Demo](https://chat-gtp-clone.vercel.app/)
 
 ## Installation
 
 - Install node in you system, You can check if you have node installed by running this code in your terminal
   ```bash
   node -v
-
-  # OUTPUT: v16.15.0 (It mustn't be same version as mine)
   ```
-  if it's not there, you can install from this site [Node JS]("https://nodejs.org/en/")
+  ```bash
+    # OUTPUT: v16.15.0 (It mustn't be same version as mine)
+  ```
+  if it's not there, you can install from this site ['Node JS'](https://nodejs.org/en/)
 
 - Clone the repo 
   ```bash
@@ -29,7 +30,8 @@ Live Demo here [Chat Bot Demo]('https://chat-gtp-clone.vercel.app/')
   Then start the server
   ```bash
   npm run dev
-
+  ```
+  ```bash
   # Output:
   Server running...
   ```
@@ -44,7 +46,8 @@ Live Demo here [Chat Bot Demo]('https://chat-gtp-clone.vercel.app/')
   Then start the server
   ```bash
   npm run dev
-
+  ```
+  ```bash
   #Output:
 
   VITE v4.0.3  ready in 375 ms
