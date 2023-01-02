@@ -161,8 +161,23 @@ textarea {
 button {
   outline: 0;
   border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  border-radius: 8px;
   cursor: pointer;
   background: transparent;
+  color: #dcdcdc;
+  font-size: 1.2rem;
+}
+
+button:active {
+  transform: scale3d(.95, .95, .95);
+}
+
+button:hover {
+  background-color: #202123;
 }
 
 form img {
