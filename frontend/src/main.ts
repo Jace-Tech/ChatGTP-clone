@@ -60,7 +60,7 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
 
   let currentIndex = 0;
   const interval = setInterval(() => {
-    if (currentIndex >= text.length) {
+    if (currentIndex > text.length) {
       if(element.classList.contains("typing")) element.classList.remove("typing");
       let mainText = text
       mainText = parseCodeFields(mainText)
