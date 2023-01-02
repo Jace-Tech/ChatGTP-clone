@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CHAT BOT</title>
-    <link rel="stylesheet" href="./src/style.css">
-  </head>
-  <body>
-    <div id="app">
-      <div id="chat_container"></div>
-      <form>
-        <textarea rows="1" cols="" name="message" placeholder="Ask me something..."></textarea>
-        <button>
-          <img src="./assets/send.svg" alt="">
-        </button>
-      </form>
-    </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHAT BOT</title>
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+</head>
+
+<body>
+  <div id="app">
+    <div id="chat_container"></div>
+    <form>
+      <textarea rows="1" cols="" name="message" placeholder="Ask me something..."></textarea>
+      <button>
+        <img src="./assets/send.svg" alt="">
+      </button>
+    </form>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+
 </html>

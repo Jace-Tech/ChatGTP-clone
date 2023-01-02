@@ -96,11 +96,36 @@ body {
   font-size: 1rem;
   line-height: 1.7;
   font-weight: 300;
+  position: relative;
   max-width: 100%;
   overflow-x: scroll;
   white-space: pre-wrap; 
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.message.typing::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 1.2rem;
+  background-color: #dcdcdc;
+  animation: blink .2s ease infinite;
+  opacity: 1;
+  position: absolute;
+  right: unset;
+  margin-left: .5rem;
+  transform: translateY(5px);
+}
+
+.message > *.link {
+  color: #adadad
+}
+
+@keyframes blink {
+  to{
+    opacity: 0;
+  }
 }
 
 .message::-webkit-scrollbar {
@@ -121,7 +146,7 @@ form {
 
 textarea {
   width: 100%;
-  resize: vertical;
+  resize: none;
   color: #fff;
   font-size: .9rem;
   font-weight: 300;

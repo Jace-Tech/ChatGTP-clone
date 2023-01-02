@@ -2,8 +2,11 @@ import bot from "../assets/bot.svg";
 import user from "../assets/user.svg";
 
 const messageBox = document.querySelector<HTMLDivElement>("#chat_container");
-const form = document.querySelector<HTMLFormElement>("form");
+const messageInput = document.querySelector<HTMLTextAreaElement>("textarea")!
+const form = document.querySelector<HTMLFormElement>("form")!;
 const CHAT_BOT_URL = "https://chatbot-api-nusx.onrender.com";
+
+const sleep = (time: number = 200) => Promise.resolve(() => setTimeout(() => true, time))
 
 const generateID = () => {
   const timestamp = Date.now().toString();
@@ -27,10 +30,24 @@ const generateChat = (message: any, isAI: boolean, id: string) => {
   return messageNode;
 };
 
+const parseLinks = (text: string): string => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, '<a class="link" target="_blank" referrerpolicy="no-referer" href="$1">$1</a>');
+}
+
+const parseCodeFields = (str: string): string => {
+  const codeRegex = /`(.+?)`/g; 
+  return str.replace(codeRegex, '<pre><code>$1</code></pre>');
+}
+
 const handleThinking = (element: HTMLElement) => {
   element.innerHTML = "";
-  const interval = setInterval(() => {
-    if (element.innerHTML.length >= 3) element.innerHTML = "";
+  const interval = setInterval( async () => {
+    if (element.innerHTML.length >= 3) {
+      element.innerHTML = "";
+      await sleep()
+    }
+
     element.innerHTML += ".";
   }, 300);
 
@@ -39,10 +56,18 @@ const handleThinking = (element: HTMLElement) => {
 
 const handleTypeChat = (element: HTMLElement, text: string) => {
   element.innerHTML = "";
+  element.classList.add("typing")
 
   let currentIndex = 0;
   const interval = setInterval(() => {
-    if (currentIndex >= text.length) return clearInterval(interval);
+    if (currentIndex >= text.length) {
+      if(element.classList.contains("typing")) element.classList.remove("typing");
+      let mainText = text
+      mainText = parseCodeFields(mainText)
+      mainText = parseLinks(mainText)
+      element.innerHTML = mainText;
+      return clearInterval(interval);
+    }
     element.innerHTML += text.charAt(currentIndex);
     currentIndex++;
     handleScrollDown();
@@ -70,6 +95,7 @@ const handleFormSubmit = async () => {
   const chatDiv = document.getElementById(id) as HTMLElement;
 
   const interval = handleThinking(chatDiv);
+  handleScrollDown()
 
   // Get bot message
   const options: RequestInit = {
@@ -96,13 +122,14 @@ const handleFormSubmit = async () => {
     clearInterval(interval);
 
     // Type in the chats
+  
     handleTypeChat(chatDiv, text.trim() as string);
 
     // Scroll down
     handleScrollDown();
 
     // Reset Form
-    form?.reset();
+    form.reset();
   } catch (error) {
     clearInterval(interval);
     chatDiv.innerHTML = "Sorry something went wrong. Please try again";
@@ -112,12 +139,17 @@ const handleFormSubmit = async () => {
   }
 };
 
-form?.addEventListener("submit", (event: SubmitEvent) => {
+form.addEventListener("submit", (event: SubmitEvent) => {
   event.preventDefault();
   handleFormSubmit();
 });
-form?.addEventListener("keyup", (event: KeyboardEvent) => {
-  if (event.key.toLowerCase() == "enter") {
+
+messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
+  if(event.shiftKey && event.key.toLowerCase() === "enter"){
+    messageInput.value += "\ "
+  }
+
+  if (event.key.toLowerCase() == "enter" && !event.shiftKey) {
     event.preventDefault();
     handleFormSubmit();
   }
