@@ -43,5 +43,24 @@ app.post("/", async (req, res) => {
 
 })
 
+app.post("/custom", async (req, res) => {
+  try {
+    const message = req.body.message
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: message,
+      temperature: req.query.temperature ? +req.query.temperature  : 0.7,
+      max_tokens: 3000,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+    res.status(200).json({ data: response.data.choices[0].text, error: null })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message, data: null });
+  }
+
+})
+
 
 app.listen(PORT, () => console.log("Server running..."));
