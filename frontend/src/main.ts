@@ -6,6 +6,9 @@ const messageInput = document.querySelector<HTMLTextAreaElement>("textarea")!
 const form = document.querySelector<HTMLFormElement>("form")!;
 const CHAT_BOT_URL = "https://chatbot-api-nusx.onrender.com";
 
+const commandStack: string[] = []
+let currentStackIndex = -1
+
 const sleep = (time: number = 200) => Promise.resolve(() => setTimeout(() => true, time))
 
 const generateID = () => {
@@ -14,6 +17,11 @@ const generateID = () => {
   const hex = randomNumber.toString(16);
   return "chat-" + timestamp + hex + randomNumber.toString();
 };
+
+const handleAddToStack = (message: string) => {
+  if(commandStack.length >= 10) commandStack.pop()
+  commandStack.unshift(message)
+}
 
 const generateChat = (message: any, isAI: boolean, id: string) => {
   const messageNode = document.createElement("div");
@@ -40,6 +48,22 @@ const parseCodeFields = (str: string): string => {
   return str.replace(codeRegex, '<pre><code>$1</code></pre>');
 }
 
+const handlePingNetwork = async () => {
+  const options: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message: "Hello" }),
+  };
+  try {
+    await fetch(CHAT_BOT_URL, options);
+  }
+  catch(e: any) {
+    console.log(e)
+  }
+}
+
 const handleThinking = (element: HTMLElement) => {
   element.innerHTML = "";
   const interval = setInterval( async () => {
@@ -59,7 +83,7 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
   element.classList.add("typing")
 
   let currentIndex = 0;
-  const interval = setInterval(() => {
+  const interval: NodeJS.Timer = setInterval(() => {
     if (currentIndex > text.length) {
       if(element.classList.contains("typing")) element.classList.remove("typing");
       let mainText = text
@@ -78,7 +102,7 @@ const handleScrollDown = () =>
   messageBox?.scrollTo({
     top: messageBox.scrollHeight,
     left: 0,
-    behavior: "smooth",
+    behavior: "auto",
   });
 
 const handleFormSubmit = async () => {
@@ -118,6 +142,9 @@ const handleFormSubmit = async () => {
       return;
     }
 
+    // Add command to stack
+    handleAddToStack(formData.get("message") as string)
+
     // Remove the thinking bar
     clearInterval(interval);
 
@@ -144,13 +171,38 @@ form.addEventListener("submit", (event: SubmitEvent) => {
   handleFormSubmit();
 });
 
+const handleGetStackItem = () => {
+  console.log(commandStack)
+  if(!commandStack.length) return
+  messageInput.value = commandStack[currentStackIndex]
+}
+
+const handleMoveDownStack = () => {
+  console.log(commandStack)
+  if(!commandStack.length || currentStackIndex <= 0) return
+  currentStackIndex--
+  handleGetStackItem()
+}
+
+const handleMoveUpStack = () => {
+  if(!commandStack.length || currentStackIndex > commandStack.length ) return
+  currentStackIndex++
+  handleGetStackItem()
+}
+
 messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
+  console.log(event)
   if(event.shiftKey && event.key.toLowerCase() === "enter"){
     messageInput.value += "\ "
   }
+
+  if(event.altKey && event.key.toLowerCase() === "arrowdown") handleMoveDownStack()
+  if(event.altKey && event.key.toLowerCase() === "arrowup") handleMoveUpStack()
 
   if (event.key.toLowerCase() == "enter" && !event.shiftKey) {
     event.preventDefault();
     handleFormSubmit();
   }
 });
+
+handlePingNetwork()

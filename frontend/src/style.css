@@ -138,7 +138,7 @@ form {
   margin: 0 auto;
   padding: 10px;
   background: #40414F;
-
+  height: fit-content;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -150,7 +150,6 @@ textarea {
   color: #fff;
   font-size: .9rem;
   font-weight: 300;
-
   padding: 10px;
   background: transparent;
   border-radius: 5px;
