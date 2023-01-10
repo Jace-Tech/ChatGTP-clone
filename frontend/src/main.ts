@@ -87,7 +87,7 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
     if (currentIndex > text.length) {
       if(element.classList.contains("typing")) element.classList.remove("typing");
       let mainText = text
-      // mainText = parseCodeFields(mainText) 
+
       mainText = parseLinks(mainText)
       element.innerHTML = mainText;
       return clearInterval(interval);
