@@ -43,10 +43,10 @@ const parseLinks = (text: string): string => {
   return text.replace(urlRegex, '<a class="link" target="_blank" referrerpolicy="no-referer" href="$1">$1</a>');
 }
 
-const parseCodeFields = (str: string): string => {
-  const codeRegex = /`(.+?)`/g; 
-  return str.replace(codeRegex, '<pre><code>$1</code></pre>');
-}
+// const parseCodeFields = (str: string): string => {
+//   const codeRegex = /`(.+?)`/g; 
+//   return str.replace(codeRegex, '<pre><code>$1</code></pre>');
+// }
 
 const handlePingNetwork = async () => {
   const options: RequestInit = {
@@ -87,7 +87,7 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
     if (currentIndex > text.length) {
       if(element.classList.contains("typing")) element.classList.remove("typing");
       let mainText = text
-      mainText = parseCodeFields(mainText)
+      // mainText = parseCodeFields(mainText) 
       mainText = parseLinks(mainText)
       element.innerHTML = mainText;
       return clearInterval(interval);
@@ -191,7 +191,6 @@ const handleMoveUpStack = () => {
 }
 
 messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
-  console.log(event)
   if(event.shiftKey && event.key.toLowerCase() === "enter"){
     messageInput.value += "\ "
   }
