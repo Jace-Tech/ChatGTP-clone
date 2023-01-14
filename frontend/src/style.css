@@ -35,6 +35,7 @@ body {
   flex-direction: column;
   gap: 10px;
 
+  /* HIDING SCROLL BAR */
   -ms-overflow-style: none;
   scrollbar-width: none;
 
@@ -145,8 +146,9 @@ form {
 
 textarea {
   width: 100%;
-  resize: none;
+  resize: vertical;
   color: #fff;
+  padding: .8rem 0;
   font-size: .9rem;
   font-weight: 300;
   padding: 10px;
@@ -174,8 +176,10 @@ button:active {
   transform: scale3d(.95, .95, .95);
 }
 
-button:hover {
-  background-color: #202123;
+@media (min-width: 992px) {
+  button:hover {
+    background-color: #202123;
+  }
 }
 
 form img {

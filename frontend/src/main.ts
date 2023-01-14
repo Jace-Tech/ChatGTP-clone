@@ -6,8 +6,16 @@ const messageInput = document.querySelector<HTMLTextAreaElement>("textarea")!
 const form = document.querySelector<HTMLFormElement>("form")!;
 const CHAT_BOT_URL = "https://chatbot-api-nusx.onrender.com";
 
+type MessageStoreType = {
+  type: string;
+  message: string
+}
+
+const STORE_NAME = 'BOT_STORE'
 const commandStack: string[] = []
 let currentStackIndex = -1
+const STORE = localStorage.getItem(STORE_NAME)
+
 
 const sleep = (time: number = 200) => Promise.resolve(() => setTimeout(() => true, time))
 
@@ -17,6 +25,16 @@ const generateID = () => {
   const hex = randomNumber.toString(16);
   return "chat-" + timestamp + hex + randomNumber.toString();
 };
+
+const handleDisplayPrevChat = () => {
+  if(!STORE) return
+  const data: MessageStoreType[] = JSON.parse(STORE)
+
+  data.forEach(msg => {
+    msg.message = msg.message.replace("\n\n", "")
+    messageBox?.appendChild(generateChat(msg.message, msg.type === "bot", generateID()))
+  })
+}
 
 const handleAddToStack = (message: string) => {
   if(commandStack.length >= 10) commandStack.pop()
@@ -106,12 +124,19 @@ const handleScrollDown = () =>
   });
 
 const handleFormSubmit = async () => {
+
+  // Add to storage 
+  const prevData: MessageStoreType[] = STORE ? JSON.parse(STORE) : []
+ 
   const formData = new FormData(form as HTMLFormElement);
   if(!formData.get("message")) return
   // Add the users chat
   messageBox?.append(
     generateChat(formData.get("message"), false, generateID())
   );
+
+  // Add user's message to store
+  prevData.push({ type: "user", message: formData.get("message") as string})
 
   // Add a thinking bar
   const id = generateID();
@@ -137,10 +162,19 @@ const handleFormSubmit = async () => {
     if (error) {
       clearInterval(interval);
       chatDiv.innerHTML = "Sorry something went wrong. Please try again";
+      prevData.push({ type: "bot", message: "Sorry something went wrong. Please try again"})
+      localStorage.setItem(STORE_NAME, JSON.stringify(prevData));
       console.log(error);
       handleScrollDown();
       return;
     }
+
+    // Add bot's message to store
+    prevData.push({ type: "bot", message: text as string })
+
+    // Overide the store
+    localStorage.setItem(STORE_NAME, JSON.stringify(prevData));
+
 
     // Add command to stack
     handleAddToStack(formData.get("message") as string)
@@ -189,6 +223,8 @@ const handleMoveUpStack = () => {
   currentStackIndex++
   handleGetStackItem()
 }
+
+window.addEventListener("load", handleDisplayPrevChat)
 
 messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
   if(event.shiftKey && event.key.toLowerCase() === "enter"){
