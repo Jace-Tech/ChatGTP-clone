@@ -11,8 +11,27 @@ html {
   font-size: 16px;
 }
 
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 582px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  html {
+    font-size: 13px;
+  }
+}
+
 body {
   background: #343541;
+  height: 100vh;
 }
 
 #app {
@@ -51,7 +70,41 @@ body {
 .wrapper {
   width: 100%;
   padding: 15px;
+  position: relative;
 }
+
+.floating-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .3rem;
+  font-size: 1rem;
+  border-radius: .2rem;
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer !important;
+  position: absolute;
+  right: .8rem;
+  top: .5rem;
+  z-index: 5;
+}
+
+@media (min-width: 992px) {
+  .floating-btn {
+    top: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .5s;
+  }
+  
+  .wrapper:hover > .floating-btn{
+    top: .5rem;
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
 
 .ai {
   background: #40414F;
@@ -158,7 +211,7 @@ textarea {
   outline: none;
 }
 
-button {
+button.submit {
   outline: 0;
   border: 0;
   display: inline-flex;
@@ -172,13 +225,15 @@ button {
   font-size: 1.2rem;
 }
 
-button:active {
+button.submit:active,
+.floating-btn:active {
   transform: scale3d(.95, .95, .95);
 }
 
 @media (min-width: 992px) {
-  button:hover {
-    background-color: #202123;
+  button.submit:hover,  
+  .floating-btn:hover{
+    background-color: #20212388;
   }
 }
 

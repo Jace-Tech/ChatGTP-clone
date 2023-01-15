@@ -1,5 +1,7 @@
 import bot from "../assets/bot.svg";
 import user from "../assets/user.svg";
+// import Toastify from "toastify-js"
+import Toastify from "toastify-js"
 
 const messageBox = document.querySelector<HTMLDivElement>("#chat_container");
 const messageInput = document.querySelector<HTMLTextAreaElement>("textarea")!
@@ -45,6 +47,9 @@ const generateChat = (message: any, isAI: boolean, id: string) => {
   const messageNode = document.createElement("div");
   messageNode.innerHTML = `
   <div class="wrapper ${isAI && "ai"}">
+    <button type="button" data-id="${id}" onclick="handleCopy(event)" class="floating-btn">
+      <ion-icon name="copy-outline"></ion-icon>
+    </button>
     <div class="chat">
       <div class="profile">
         <img src="${isAI ? bot : user}" alt="">
@@ -55,6 +60,18 @@ const generateChat = (message: any, isAI: boolean, id: string) => {
 `;
   return messageNode;
 };
+
+const handleCopy = (e: MouseEvent) => {
+  let id = e?.target?.parentNode?.dataset?.id 
+  if(!id) id = e?.target?.dataset?.id
+
+  const message = document.getElementById(id)?.innerText!
+  navigator.clipboard.writeText(message)
+  .then(() => {
+    Toastify({text: "Text copied!", style: { fontSize: ".9rem", background: "#06beb699" }}).showToast()
+  })
+
+}
 
 const parseLinks = (text: string): string => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -206,20 +223,25 @@ form.addEventListener("submit", (event: SubmitEvent) => {
 });
 
 const handleGetStackItem = () => {
-  console.log(commandStack)
   if(!commandStack.length) return
+  console.table({
+    index: currentStackIndex,
+    command: commandStack[currentStackIndex],
+    stack: commandStack
+  })
+  return
   messageInput.value = commandStack[currentStackIndex]
+  console.log()
 }
 
 const handleMoveDownStack = () => {
-  console.log(commandStack)
   if(!commandStack.length || currentStackIndex <= 0) return
   currentStackIndex--
   handleGetStackItem()
 }
 
 const handleMoveUpStack = () => {
-  if(!commandStack.length || currentStackIndex > commandStack.length ) return
+  if(!commandStack.length || currentStackIndex > commandStack.length - 1 ) return
   currentStackIndex++
   handleGetStackItem()
 }
@@ -231,8 +253,8 @@ messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
     messageInput.value += "\ "
   }
 
-  if(event.altKey && event.key.toLowerCase() === "arrowdown") handleMoveDownStack()
   if(event.altKey && event.key.toLowerCase() === "arrowup") handleMoveUpStack()
+  if(event.altKey && event.key.toLowerCase() === "arrowdown") handleMoveDownStack()
 
   if (event.key.toLowerCase() == "enter" && !event.shiftKey) {
     event.preventDefault();
@@ -240,4 +262,5 @@ messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
   }
 });
 
-handlePingNetwork()
+window.handleCopy = handleCopy;
+window.addEventListener("load", handlePingNetwork)

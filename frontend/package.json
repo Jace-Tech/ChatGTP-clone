@@ -13,6 +13,8 @@
     "vite": "^4.0.0"
   },
   "dependencies": {
+    "@types/toastify-js": "^1.11.1",
+    "toastify-js": "^1.12.0",
     "workbox": "^0.0.0",
     "workbox-cli": "^6.5.4"
   }
