@@ -2,8 +2,8 @@
   "name": "backend",
   "version": "1.0.0",
   "scripts": {
-    "build": "rimraf ./build && npx tsc",
-    "start": "yarn build && node ./build/server.js",
+    "build": "npx tsc",
+    "start": "node ./build/server.js",
     "dev": "nodemon src/server.ts"
   },
   "license": "MIT",

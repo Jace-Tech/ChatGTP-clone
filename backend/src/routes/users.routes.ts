@@ -1,13 +1,11 @@
+import { handleDeleteUser, handleGetUsers } from './../controllers/user.controller';
 import { Router, Request, Response } from 'express';
-import userModel from '../models/user.model';
-import response from '../utils/response';
+import authMiddleware from '../middlewares/auth.middleware';
 
 
 const usersRoute = Router()
 
-usersRoute.get("/", async (req: Request, res: Response) => {
-  const users = await userModel.find({})
-  res.status(200).send(response("users", users, true))
-})
+usersRoute.get("/", authMiddleware, handleGetUsers)
+usersRoute.get("/delete/:id", handleDeleteUser)
 
 export default usersRoute
