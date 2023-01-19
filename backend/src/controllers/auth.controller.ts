@@ -37,13 +37,21 @@ export const handleSignIn =  async(req: Request, res: Response) => {
   if(!req.body.email) throw new CustomError("Email is required")
   if(!req.body.password) throw new CustomError("Password is required")
 
-  const user = await userModel.findOne({ email: req.body.email}, { __v: 0, password: 0 })
+  const user = await userModel.findOne({ email: req.body.email })
   if(!user) throw new CustomError("Invalid credientials")
   if(!await compare(req.body.password, user.password)) throw new CustomError("Invalid credientials")
   const token = sign({ userId: user._id }, process.env.SECRET as string, { expiresIn: "7d" })
 
   // Send mail later
-  res.status(201).send(response("Log in successful", { ...user, token}, true))
+  const data = {
+    id: user._id,
+    email: user.email,
+    name: user.name,
+    isElecting: user.isElecting,
+    isCandidate: user.isCandidate,
+    isEmailVerified: user.isEmailVerified,
+  }
+  res.status(201).send(response("Log in successful", { ...data, token}, true))
 }
 
 export const handleSignInWithGoogle =  async(req: Request, res: Response) => {
