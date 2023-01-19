@@ -20,6 +20,7 @@ export const handleSignUp =  async(req: Request, res: Response) => {
 
   const hashedPassword = await hash(req.body.password, 12)
   const user = await userModel.create({ ...req.body, password: hashedPassword })
+  const token = sign({ userId: user._id }, process.env.SECRET as string, { expiresIn: "7d" })
   
   // Send mail later
   const data = {
@@ -29,6 +30,7 @@ export const handleSignUp =  async(req: Request, res: Response) => {
     isElecting: user.isElecting,
     isCandidate: user.isCandidate,
     isEmailVerified: user.isEmailVerified,
+    token
   }
   res.status(201).send(response("Registration successful", data, true))
 }
