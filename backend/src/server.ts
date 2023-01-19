@@ -1,66 +1,27 @@
 import express from 'express';
-import cors from 'cors';
 import * as dotenv from 'dotenv';
-import { Configuration, OpenAIApi } from 'openai';
+
+import errorMiddleware from './middlewares/error.middleware';
+import preMiddleware from './middlewares/pre.middleware';
+import Routes from './routes';
+import database from "./config/database"
 
 dotenv.config()
 
-const configuration = new Configuration({
-  apiKey: process.env.API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
-
 const PORT = process.env.PORT || 5000
-
 const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+// Pre middleware 
+preMiddleware(app)
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hello CHAT BOT" })
+// Routes
+app.use("/", Routes)
+
+// Error middleware
+errorMiddleware(app)
+
+database(() => {
+  app.listen(PORT, () => { 
+    console.log("Server running...")
+  });  
 })
-
-app.post("/", async (req, res) => {
-  try {
-    const message = req.body.message
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: message,
-      temperature: 0.7,
-      max_tokens: 3000,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
-
-    res.status(200).json({ data: response.data.choices[0].text, error: null })
-  } catch (err: any) {
-    res.status(500).json({ error: err.message, data: null });
-  }
-
-})
-
-app.post("/custom", async (req, res) => {
-  try {
-    const message = req.body.message
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: message,
-      temperature: req.query.temperature ? +req.query.temperature  : 0.7,
-      max_tokens: 3000,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    });
-    res.status(200).json({ data: response.data.choices[0].text, error: null })
-  } catch (err: any) {
-    res.status(500).json({ error: err.message, data: null });
-  }
-
-})
-
-
-app.listen(PORT, () => console.log("Server running..."));
