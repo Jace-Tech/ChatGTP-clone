@@ -36,6 +36,8 @@ const handleDisplayPrevChat = () => {
     msg.message = msg.message.replace("\n\n", "")
     messageBox?.appendChild(generateChat(msg.message, msg.type === "bot", generateID()))
   })
+
+  handleScrollDown()
 }
 
 const handleAddToStack = (message: string) => {
@@ -47,9 +49,15 @@ const generateChat = (message: any, isAI: boolean, id: string) => {
   const messageNode = document.createElement("div");
   messageNode.innerHTML = `
   <div class="wrapper ${isAI && "ai"}">
+  <div class="floating-btns">
     <button type="button" data-id="${id}" onclick="handleCopy(event)" class="floating-btn">
       <ion-icon name="copy-outline"></ion-icon>
     </button>
+
+    <button type="button" data-id="${id}" onclick="handleToggleFormatting(event)" class="floating-btn">
+      <ion-icon id="flash-${id}" name="flash-outline"></ion-icon>
+    </button>
+  </div>
     <div class="chat">
       <div class="profile">
         <img src="${isAI ? bot : user}" alt="">
@@ -73,10 +81,46 @@ const handleCopy = (e: MouseEvent) => {
 
 }
 
+
+const handleToggleFormatting = (e: Event) => {
+
+  let id = e?.target?.parentNode?.dataset?.id 
+  if(!id) id = e?.target?.dataset?.id
+
+  const messageElement = document.getElementById(id)!
+  const message = messageElement.innerHTML
+  const flashIcon = document.getElementById(`flash-${id}`)
+
+  if(!flashIcon?.getAttribute("data-on")) {
+    // Keep track of the formal message
+    flashIcon?.setAttribute("prevMsg", message)
+
+    // Format the message
+    messageElement.innerHTML = parseLinks(message)
+
+    // Keep track of icon change
+    flashIcon?.setAttribute("name", "flash-off-outline")
+    flashIcon?.setAttribute("data-on", "true")
+    return
+  }
+
+  // Add the prev message back
+  const prevMsg =  flashIcon?.getAttribute("prevMsg")!
+  messageElement.innerHTML = prevMsg
+  // Change the icon back
+  flashIcon?.setAttribute("name", "flash-outline")
+
+  // Remove the prev message and the color of the icon
+  flashIcon?.removeAttribute("data-on")
+  flashIcon?.getAttribute("prevMsg")
+  
+}
+
 const parseLinks = (text: string): string => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, '<a class="link" target="_blank" referrerpolicy="no-referer" href="$1">$1</a>');
 }
+
 
 // const parseCodeFields = (str: string): string => {
 //   const codeRegex = /`(.+?)`/g; 
@@ -122,8 +166,7 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
     if (currentIndex > text.length) {
       if(element.classList.contains("typing")) element.classList.remove("typing");
       let mainText = text
-
-      mainText = parseLinks(mainText)
+      // mainText = parseLinks(mainText)
       element.innerHTML = mainText;
       return clearInterval(interval);
     }
@@ -200,7 +243,6 @@ const handleFormSubmit = async () => {
     clearInterval(interval);
 
     // Type in the chats
-  
     handleTypeChat(chatDiv, text.trim() as string);
 
     // Scroll down
@@ -229,9 +271,7 @@ const handleGetStackItem = () => {
     command: commandStack[currentStackIndex],
     stack: commandStack
   })
-  return
   messageInput.value = commandStack[currentStackIndex]
-  console.log()
 }
 
 const handleMoveDownStack = () => {
@@ -241,7 +281,7 @@ const handleMoveDownStack = () => {
 }
 
 const handleMoveUpStack = () => {
-  if(!commandStack.length || currentStackIndex > commandStack.length - 1 ) return
+  if(!commandStack.length || currentStackIndex > commandStack.length - 2 ) return
   currentStackIndex++
   handleGetStackItem()
 }
@@ -263,4 +303,5 @@ messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 
 window.handleCopy = handleCopy;
+window.handleToggleFormatting = handleToggleFormatting
 window.addEventListener("load", handlePingNetwork)

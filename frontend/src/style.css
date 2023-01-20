@@ -17,18 +17,6 @@ html {
   }
 }
 
-@media (max-width: 582px) {
-  html {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 420px) {
-  html {
-    font-size: 13px;
-  }
-}
-
 body {
   background: #343541;
   height: 100vh;
@@ -71,6 +59,30 @@ body {
   width: 100%;
   padding: 15px;
   position: relative;
+  user-select: none;
+  /* padding-right: 1.5rem; */
+}
+
+@media (max-width: 767px) {
+  .wrapper {
+    padding-right: 2.5rem;
+  } 
+}
+
+.floating-btns {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  position: absolute;
+  right: .8rem;
+  top: .5rem;
+  z-index: 5;
+}
+
+@media (max-width: 768px) {
+  .floating-btns {
+    flex-direction: column;
+  }
 }
 
 .floating-btn {
@@ -84,21 +96,17 @@ body {
   border: none;
   color: #fff;
   cursor: pointer !important;
-  position: absolute;
-  right: .8rem;
-  top: .5rem;
-  z-index: 5;
 }
 
 @media (min-width: 992px) {
-  .floating-btn {
+  .floating-btns {
     top: 2rem;
     opacity: 0;
     pointer-events: none;
     transition: all .5s;
   }
   
-  .wrapper:hover > .floating-btn{
+  .wrapper:hover > .floating-btns{
     top: .5rem;
     opacity: 1;
     pointer-events: all;
@@ -240,4 +248,9 @@ button.submit:active,
 form img {
   width: 30px;
   height: 30px;
+}
+
+
+ion-icon[data-on] {
+  fill: #10a37f;
 }
