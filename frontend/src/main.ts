@@ -304,4 +304,4 @@ messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
 
 window.handleCopy = handleCopy;
 window.handleToggleFormatting = handleToggleFormatting
-window.addEventListener("load", handlePingNetwork)
+window.addEventListener("load", handlePingNetwork, { once: true });
