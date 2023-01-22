@@ -9,6 +9,7 @@ const form = document.querySelector<HTMLFormElement>("form")!;
 const CHAT_BOT_URL = "https://chatbot-api-nusx.onrender.com";
 
 type MessageStoreType = {
+  id: string;
   type: string;
   message: string
 }
@@ -16,8 +17,6 @@ type MessageStoreType = {
 const STORE_NAME = 'BOT_STORE'
 const commandStack: string[] = []
 let currentStackIndex = -1
-const STORE = localStorage.getItem(STORE_NAME)
-
 
 const sleep = (time: number = 200) => Promise.resolve(() => setTimeout(() => true, time))
 
@@ -29,15 +28,28 @@ const generateID = () => {
 };
 
 const handleDisplayPrevChat = () => {
-  if(!STORE) return
-  const data: MessageStoreType[] = JSON.parse(STORE)
+  if(!getStore()) return
+  const data: MessageStoreType[] = JSON.parse(getStore() as string)
 
   data.forEach(msg => {
     msg.message = msg.message.replace("\n\n", "")
-    messageBox?.appendChild(generateChat(msg.message, msg.type === "bot", generateID()))
+    messageBox?.appendChild(generateChat(msg.message, msg.type === "bot", msg.id))
   })
 
   handleScrollDown()
+}
+
+const handleDeleteChat = (event: Event) => {
+  const id = event.target?.id  
+  if(!id || !getStore()) return
+  const prevStore: MessageStoreType[] = JSON.parse(getStore() as string)
+  console.log(prevStore)
+  console.log(id)
+  if (!prevStore.find(chat => chat.id === id)) return
+  const newStore = prevStore.filter(store => store.id !== id)
+  localStorage.setItem(STORE_NAME, JSON.stringify(newStore))
+  Toastify({text: "Chat deleted!", style: { fontSize: ".9rem", background: "#06beb699" }}).showToast()
+  handleDisplayPrevChat()
 }
 
 const handleAddToStack = (message: string) => {
@@ -48,7 +60,7 @@ const handleAddToStack = (message: string) => {
 const generateChat = (message: any, isAI: boolean, id: string) => {
   const messageNode = document.createElement("div");
   messageNode.innerHTML = `
-  <div class="wrapper ${isAI && "ai"}">
+  <div class="wrapper ${isAI && "ai"}" ondblclick="handleDeleteChat(event)">
   <div class="floating-btns">
     <button type="button" data-id="${id}" onclick="handleCopy(event)" class="floating-btn">
       <ion-icon name="copy-outline"></ion-icon>
@@ -80,7 +92,6 @@ const handleCopy = (e: MouseEvent) => {
   })
 
 }
-
 
 const handleToggleFormatting = (e: Event) => {
 
@@ -183,20 +194,22 @@ const handleScrollDown = () =>
     behavior: "auto",
   });
 
+const getStore = (): string | null => localStorage.getItem(STORE_NAME);
+
 const handleFormSubmit = async () => {
 
   // Add to storage 
-  const prevData: MessageStoreType[] = STORE ? JSON.parse(STORE) : []
+  const prevData: MessageStoreType[] = getStore() ? JSON.parse(getStore() as string) : []
  
   const formData = new FormData(form as HTMLFormElement);
   if(!formData.get("message")) return
   // Add the users chat
+  const userMsgId = generateID()
   messageBox?.append(
-    generateChat(formData.get("message"), false, generateID())
+    generateChat(formData.get("message"), false, userMsgId)
   );
-
   // Add user's message to store
-  prevData.push({ type: "user", message: formData.get("message") as string})
+  prevData.push({ id: userMsgId, type: "user", message: formData.get("message") as string})
 
   // Add a thinking bar
   const id = generateID();
@@ -222,19 +235,17 @@ const handleFormSubmit = async () => {
     if (error) {
       clearInterval(interval);
       chatDiv.innerHTML = "Sorry something went wrong. Please try again";
-      prevData.push({ type: "bot", message: "Sorry something went wrong. Please try again"})
+      prevData.push({ id, type: "bot", message: "Sorry something went wrong. Please try again"})
       localStorage.setItem(STORE_NAME, JSON.stringify(prevData));
       console.log(error);
       handleScrollDown();
       return;
     }
-
     // Add bot's message to store
-    prevData.push({ type: "bot", message: text as string })
+    prevData.push({ id, type: "bot", message: text as string })
 
     // Overide the store
     localStorage.setItem(STORE_NAME, JSON.stringify(prevData));
-
 
     // Add command to stack
     handleAddToStack(formData.get("message") as string)
@@ -303,5 +314,6 @@ messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
 });
 
 window.handleCopy = handleCopy;
+window.handleDeleteChat = handleDeleteChat;
 window.handleToggleFormatting = handleToggleFormatting
 window.addEventListener("load", handlePingNetwork, { once: true });

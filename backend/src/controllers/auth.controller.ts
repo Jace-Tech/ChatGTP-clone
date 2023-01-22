@@ -1,4 +1,3 @@
-import { IUser } from './../@types/common.d';
 import { compare, hash } from 'bcrypt';
 import { Request, Response } from 'express';
 import userModel from '../models/user.model';

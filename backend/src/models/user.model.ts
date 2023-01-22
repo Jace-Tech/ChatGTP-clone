@@ -15,6 +15,10 @@ const UserSchema = new Schema<IUser>({
     type: "string",
     required: true
   },
+  image: {
+    type: String,
+    default: null
+  },
   isEmailVerified: {
     type: Boolean,
     default: false
