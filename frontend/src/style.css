@@ -59,7 +59,7 @@ body {
   width: 100%;
   padding: 15px;
   position: relative;
-  user-select: none;
+  /* user-select: none; */
   /* padding-right: 1.5rem; */
 }
 
