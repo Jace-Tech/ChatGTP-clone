@@ -176,9 +176,6 @@ const handleTypeChat = (element: HTMLElement, text: string) => {
   const interval: NodeJS.Timer = setInterval(() => {
     if (currentIndex > text.length) {
       if(element.classList.contains("typing")) element.classList.remove("typing");
-      let mainText = text
-      // mainText = parseLinks(mainText)
-      element.innerHTML = mainText;
       return clearInterval(interval);
     }
     element.innerHTML += text.charAt(currentIndex);
