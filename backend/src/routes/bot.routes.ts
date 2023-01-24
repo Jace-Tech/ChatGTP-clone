@@ -55,4 +55,20 @@ router.post("/custom", async (req: Request, res: Response) => {
 
 })
 
+router.post("/image", async(req: Request, res: Response) => {
+  try {
+    const prompt = req.body.message
+    const response = await openai.createImage({
+     prompt,
+     n: 1,
+     response_format: "url",
+     size: "1024x1024",
+    });
+    res.status(200).json({ data: response.data.data, error: null })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message, data: null });
+  }
+
+})
+
 export default router
