@@ -52,7 +52,6 @@ router.post("/custom", async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({ error: err.message, data: null });
   }
-
 })
 
 router.post("/image", async(req: Request, res: Response) => {
@@ -68,7 +67,6 @@ router.post("/image", async(req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({ error: err.message, data: null });
   }
-
 })
 
 export default router
