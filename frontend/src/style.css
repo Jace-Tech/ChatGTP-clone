@@ -254,3 +254,135 @@ form img {
 ion-icon[data-on] {
   fill: #10a37f;
 }
+
+/* MODAL STYLES */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .4);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: .5s ease-in-out;
+}
+
+
+.modal.show {
+  pointer-events: all;
+  opacity: 1;
+}
+
+/*  */
+.modal-inner {
+  background-color: #40414f;
+  max-width: 600px;
+  padding: 1rem;
+  border-radius: 5px;
+  margin: 0 auto;
+  gap: 1rem;
+  display: flex;
+  position: relative;
+  /* Transitions */
+  transform: translateY(-100px);
+  opacity: 0;
+  transition: .5s ease-in-out 2s;
+}
+
+@media (max-width: 767px) {
+  .modal-inner {
+    flex-direction: column;
+    border-radius: 0;
+  }
+}
+
+.modal.show .modal-inner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification {
+  flex: 1;
+  /* margin-left: 1rem; */
+}
+
+.note-icon {
+  font-size: 2.5rem;
+  color: rgb(76, 166, 255);
+}
+
+.note-title {
+  font-size: 1.9rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.note-content {
+  line-height: 1.7;
+  margin-bottom: .8rem;
+  color: #fff;
+  font-weight: 300;
+}
+
+.note-contact {
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .8rem;
+  text-decoration: none;
+  font-size: .95rem;
+  border-radius: 4px;
+}
+
+.icon  {
+  font-size: 1.5rem;
+  color: #aaa;
+}
+
+.social-link:hover,
+.social-link:focus {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.social-link.whatsapp > .icon  {
+  color: rgb(37, 211, 102);
+  font-size: 1.5rem;
+}
+
+.social-link.whatsapp:hover,
+.social-link.whatsapp:focus {
+  background-color: rgb(37, 211, 102, 0.4);
+}
+
+.social-link.twitter > .icon  {
+  color: rgb(29, 161, 242);
+  font-size: 1.5rem;
+}
+
+.social-link.twitter:hover,
+.social-link.twitter:focus {
+  background-color: rgb(29, 161, 242, 0.4);
+}
+
+
+.social-name {
+  color: #fff;
+  font-weight: 500;
+}

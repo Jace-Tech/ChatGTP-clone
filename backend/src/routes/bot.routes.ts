@@ -28,8 +28,6 @@ router.post("/", async (req: Request, res: Response) => {
       frequency_penalty: 0,
       presence_penalty: 0,
     });
-
-    console.log('STATUS =>>>', response.status)
     res.status(200).json({ data: response.data.choices[0].text, error: null })
   } catch (err: any) {
     res.status(500).json({ error: err.message, data: null });

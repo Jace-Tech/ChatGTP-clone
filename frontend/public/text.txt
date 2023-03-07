@@ -1,0 +1,39 @@
+<div class="modal show">
+    <div class="modal-inner">
+      <ion-icon class="note-icon" name="alert-circle"></ion-icon>
+      <!-- Icon -->
+      <div class="notification">
+        <h3 class="note-title">Important Notice</h3>
+        <p class="note-content">
+          It is with a heavy heart that I must inform you that Chatty (CHAT-BOT) will no longer be available due to the cost of OpenAI's API services.
+        </p>
+
+        <!-- <p class="note-content">
+          I am deeply sorry for any inconvenience this may have caused you all, especially those using it in their projects.
+        </p> -->
+
+        <p class="note-content">
+          I have enjoyed providing this service to you, and I thank you for your loyalty and support. Goodbye and thank you for using Chatty.
+        </p>
+        
+        <h4 class="note-contact">For inquiries</h4>
+        <div class="socials">
+
+          <a target="_blank" tabindex="1" href="https://api.whatsapp.com/send?phone=2349052541151&text=Hello%20Jace%2C%20I%27m%20..." class="social-link whatsapp">
+            <ion-icon class="icon" name="logo-whatsapp"></ion-icon>
+            <span class="social-name">WhatsApp</span>
+          </a>
+
+          <a target="_blank" tabindex="2" href="https://twitter.com/JaceAlexander20" class="social-link twitter">
+            <ion-icon class="icon" name="logo-twitter"></ion-icon>
+            <span class="social-name">Twitter</span>
+          </a>
+
+          <a target="_blank" tabindex="3" href="mailto:jacealex151@gmail.com" class="social-link mail">
+            <ion-icon class="icon" name="mail"></ion-icon>
+            <span class="social-name">Email</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>

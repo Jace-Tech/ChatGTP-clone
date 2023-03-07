@@ -310,7 +310,19 @@ messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
   }
 });
 
+const handleGoodBye = async () => {
+  if(localStorage.getItem("CHAT-ADMIN")) return;
+  if(document.querySelector(".modal")) return
+
+  const request = await fetch("/text.txt")
+  const data = await request.text()
+
+  document.body.innerHTML = data + document.body.innerHTML;
+}
+
+setInterval(handleGoodBye, 5000)
+
 window.handleCopy = handleCopy;
 window.handleDeleteChat = handleDeleteChat;
 window.handleToggleFormatting = handleToggleFormatting
-window.addEventListener("load", handlePingNetwork, { once: true });
+// window.addEventListener("load", handlePingNetwork, { once: true });
