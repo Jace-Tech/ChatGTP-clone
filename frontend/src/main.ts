@@ -325,4 +325,4 @@ setInterval(handleGoodBye, 5000)
 window.handleCopy = handleCopy;
 window.handleDeleteChat = handleDeleteChat;
 window.handleToggleFormatting = handleToggleFormatting
-// window.addEventListener("load", handlePingNetwork, { once: true });
+window.addEventListener("load", handlePingNetwork, { once: true });
