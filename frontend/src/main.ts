@@ -294,7 +294,10 @@ const handleMoveUpStack = () => {
   handleGetStackItem()
 }
 
-window.addEventListener("load", handleDisplayPrevChat)
+const handleCheckAdminHash = () => {
+  if(!(location.hash && location.hash.slice(1).toLowerCase() === "chat-admin")) return
+  localStorage.setItem("CHAT-ADMIN", "YES")
+}
 
 messageInput.addEventListener("keydown", (event: KeyboardEvent) => {
   if(event.shiftKey && event.key.toLowerCase() === "enter"){
@@ -320,9 +323,15 @@ const handleGoodBye = async () => {
   document.body.innerHTML = data + document.body.innerHTML;
 }
 
+
+// EVENTS
 setInterval(handleGoodBye, 5000)
 
 window.handleCopy = handleCopy;
 window.handleDeleteChat = handleDeleteChat;
 window.handleToggleFormatting = handleToggleFormatting
 window.addEventListener("load", handlePingNetwork, { once: true });
+
+
+window.addEventListener("load", handleCheckAdminHash)
+window.addEventListener("load", handleDisplayPrevChat)
